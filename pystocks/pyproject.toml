@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pystocks"
+version = "0.1.0"
+description = ""
+authors = ["Gary Clark <gclark@xccelerated.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+yfinance = "^0.1.84"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
