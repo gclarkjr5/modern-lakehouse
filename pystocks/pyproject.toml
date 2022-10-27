@@ -7,6 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+dagster = "^1.0.14"
+dagit = "^1.0.14"
 
 
 [build-system]
