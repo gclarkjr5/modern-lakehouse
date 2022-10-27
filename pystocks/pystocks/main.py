@@ -1,10 +1,10 @@
 import os
 from datetime import datetime, timedelta, timezone
 import yfinance as yf
-from dagster import asset
+from dagster import op, job
 
 
-@asset
+@op
 def stock_data():
     yesterday = datetime.now()
     yesterday = yesterday.replace(tzinfo=timezone.utc)
@@ -21,12 +21,12 @@ def stock_data():
     return df
 
 
-@asset
-def save_stock_data_op(stock_data):
-    if os.path.exists('google.csv'):
-        stock_data.to_csv('google.csv', mode='a', header=False, index=True)
-    else:
-        stock_data.to_csv('google.csv', mode='a', index=True)
+# @op
+# def save_stock_data_op(stock_data):
+#     if os.path.exists('google.csv'):
+#         stock_data.to_csv('google.csv', mode='a', header=False, index=True)
+#     else:
+#         stock_data.to_csv('google.csv', mode='a', index=True)
 
     # target_file = context.op_config["target_file"]
     # symbols = context.op_config["symbols"]
