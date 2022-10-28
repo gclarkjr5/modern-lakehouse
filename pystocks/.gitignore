@@ -2,6 +2,11 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,macos
 *.csv
 tmp*/*
+.telemetry/
+history/
+schedules/
+storage/
+pystocks_scaff/
 ### macOS ###
 # General
 .DS_Store
