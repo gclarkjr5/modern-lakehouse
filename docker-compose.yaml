@@ -1,26 +1,61 @@
 version: '3.9'
 services:
 
-  minio:
-    hostname: minio
-    image: 'minio/minio'
-    container_name: minio
-    ports:
-      - '9000:9000'
-      - '9001:9001'
+  # minio:
+  #   image: 'minio/minio'
+  #   container_name: minio
+  #   ports:
+  #     - '9000:9000'
+  #     - '9001:9001'
+  #   volumes:
+  #     - ./volumes/minio:/data
+  #   environment:
+  #     - MINIO_ROOT_USER=minio
+  #     - MINIO_ROOT_PASSWORD=minio123
+  #   command: server /data --console-address ":9001"
+  #   # networks:
+  #   #   - ndsnet
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
+  pystocks:
+    build: ./pystocks
+    container_name: stocks
     volumes:
-      - ./volumes/minio:/data
-    environment:
-      - MINIO_ROOT_USER=minio
-      - MINIO_ROOT_PASSWORD=minio123
-    command: server /data --console-address ":9001"
-    # networks:
-    #   - ndsnet
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - ./pystocks:/opt/dagster
+      - ./volumes/data/stage:/var/lib/data
+    ports:
+      - 4000:4000
+
+  dagster-daemon:
+    build: ./pystocks
+    container_name: dagster-daemon
+    volumes:
+      - ./pystocks:/opt/dagster
+    command: ["dagster-daemon", "run"]
+    depends_on:
+      - pystocks
+
+  dagit:
+    build: ./pystocks
+    container_name: dagit
+    ports:
+      - 3000:3000
+    volumes:
+      - ./pystocks:/opt/dagster
+    command: ["dagit", "-h", "0.0.0.0"]
+    depends_on:
+      - dagster-daemon
+
+  # spark-bronze:
+  #   build: ./spark-bronze
+  #   container_name: spark-bronze
+  #   # volumes:
+  #   #   - ./pystocks:/opt/dagster
+  #   command: ["tail", "-f", "/dev/null"]
 
 #   mc:
 #     image: minio/mc

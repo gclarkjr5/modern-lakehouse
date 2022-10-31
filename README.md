@@ -29,6 +29,12 @@ Creating a lakehouse architecture step-by-step using the same tools that ngods u
    - re-run dagit command
    - run `dagster-daemon run` in another terminal, make sure DAGSTER_HOME is set
 
+## Containerize our application
+
+- Create a Dockerfile
+- open up ports
+- create a volume
+
 ## A place to store data - Minio
 
 - staging

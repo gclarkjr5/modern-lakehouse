@@ -1,0 +1,8 @@
+.venv/
+pystocks_scaff/
+tests/
+.gitignore
+.dockerignore
+*.csv
+poetry.lock
+pyproject.toml

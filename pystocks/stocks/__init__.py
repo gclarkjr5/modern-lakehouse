@@ -1,1 +1,1 @@
-from .repository import stocks_repository
+from .repo import stocks_repository

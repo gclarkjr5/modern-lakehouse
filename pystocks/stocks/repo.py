@@ -1,8 +1,7 @@
 import os
 from datetime import datetime, timedelta, timezone
-import sched
 import yfinance as yf
-from dagster import job, op, ScheduleDefinition, DefaultScheduleStatus, schedule
+from dagster import op, job, repository, schedule, ScheduleDefinition, DefaultScheduleStatus
 
 
 @op
@@ -24,10 +23,11 @@ def get_stock_data_op():
 
 @op
 def save_stock_data_op(stock_data):
-    if os.path.exists('google.csv'):
-        stock_data.to_csv('google.csv', mode='a', header=False, index=True)
+    target_file = '/var/lib/data/google.csv'
+    if os.path.exists(target_file):
+        stock_data.to_csv(target_file, mode='a', header=False, index=True)
     else:
-        stock_data.to_csv('google.csv', mode='a', index=True)
+        stock_data.to_csv(target_file, mode='a', index=True)
 
 
 @job
@@ -41,3 +41,8 @@ basic_schedule = ScheduleDefinition(
     job=stocks, cron_schedule="* * * * *",
     default_status=DefaultScheduleStatus.RUNNING
 )
+
+
+@repository
+def stocks_repository():
+    return [stocks, basic_schedule]
